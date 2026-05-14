@@ -10,6 +10,7 @@ import { TaskProvider } from "./context/TaskContext";
 
 const AllTasksPage = lazy(() => import("./pages/AllTasksPage"));
 const CompletedTasksPage = lazy(() => import("./pages/CompletedTasksPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<AllTasksPage />} />
                 <Route path="/completed" element={<CompletedTasksPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </main>
