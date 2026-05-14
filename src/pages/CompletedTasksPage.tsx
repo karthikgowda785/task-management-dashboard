@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useTaskContext } from "../context/TaskContext";
 import TaskCard from "../components/TaskCard";
 import EmptyState from "../components/EmptyState";
@@ -19,24 +19,25 @@ const CompletedTasksPage: React.FC = () => {
       );
   }, [state.tasks]);
 
-  const handleOpenEditModal = (task: Task) => {
+  const handleOpenEditModal = useCallback((task: Task) => {
     setEditingTask(task);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setEditingTask(undefined);
-  };
+  }, []);
 
-  const handleSubmitTask = (
-    taskData: Omit<Task, "id" | "createdAt"> | Task,
-  ) => {
-    if ("id" in taskData) {
-      updateTask(taskData as Task);
-    }
-    handleCloseModal();
-  };
+  const handleSubmitTask = useCallback(
+    (taskData: Omit<Task, "id" | "createdAt"> | Task) => {
+      if ("id" in taskData) {
+        updateTask(taskData as Task);
+      }
+      handleCloseModal();
+    },
+    [updateTask, handleCloseModal],
+  );
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
@@ -65,11 +66,16 @@ const CompletedTasksPage: React.FC = () => {
         onClose={handleCloseModal}
         title="Edit Task"
       >
-        <TaskForm
-          initialData={editingTask}
-          onSubmit={handleSubmitTask}
-          onCancel={handleCloseModal}
-        />
+        {useMemo(
+          () => (
+            <TaskForm
+              initialData={editingTask}
+              onSubmit={handleSubmitTask}
+              onCancel={handleCloseModal}
+            />
+          ),
+          [editingTask, handleSubmitTask, handleCloseModal],
+        )}
       </TaskModal>
     </div>
   );

@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import type { ReactNode } from "react";
 import { taskReducer } from "./taskReducer";
 import type { TaskState, TaskAction } from "./taskReducer";
@@ -39,30 +46,29 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state.tasks));
   }, [state.tasks]);
 
-  const addTask = (taskData: Omit<Task, "id" | "createdAt">) => {
+  const addTask = useCallback((taskData: Omit<Task, "id" | "createdAt">) => {
     const newTask: Task = {
       ...taskData,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
     dispatch({ type: "ADD_TASK", payload: newTask });
-  };
+  }, []);
 
-  const updateTask = (task: Task) => {
+  const updateTask = useCallback((task: Task) => {
     dispatch({ type: "UPDATE_TASK", payload: task });
-  };
+  }, []);
 
-  const deleteTask = (id: string) => {
+  const deleteTask = useCallback((id: string) => {
     dispatch({ type: "DELETE_TASK", payload: id });
-  };
+  }, []);
 
-  return (
-    <TaskContext.Provider
-      value={{ state, dispatch, addTask, updateTask, deleteTask }}
-    >
-      {children}
-    </TaskContext.Provider>
+  const value = useMemo(
+    () => ({ state, dispatch, addTask, updateTask, deleteTask }),
+    [state, addTask, updateTask, deleteTask],
   );
+
+  return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

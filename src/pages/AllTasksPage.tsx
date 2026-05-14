@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useTaskContext } from "../context/TaskContext";
 import SummaryCards from "../components/SummaryCards";
 import FilterBar from "../components/FilterBar";
@@ -18,31 +18,32 @@ const AllTasksPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
 
-  const handleOpenAddModal = () => {
+  const handleOpenAddModal = useCallback(() => {
     setEditingTask(undefined);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenEditModal = (task: Task) => {
+  const handleOpenEditModal = useCallback((task: Task) => {
     setEditingTask(task);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setEditingTask(undefined);
-  };
+  }, []);
 
-  const handleSubmitTask = (
-    taskData: Omit<Task, "id" | "createdAt"> | Task,
-  ) => {
-    if ("id" in taskData) {
-      updateTask(taskData as Task);
-    } else {
-      addTask(taskData);
-    }
-    handleCloseModal();
-  };
+  const handleSubmitTask = useCallback(
+    (taskData: Omit<Task, "id" | "createdAt"> | Task) => {
+      if ("id" in taskData) {
+        updateTask(taskData as Task);
+      } else {
+        addTask(taskData);
+      }
+      handleCloseModal();
+    },
+    [addTask, updateTask, handleCloseModal],
+  );
 
   const filteredAndSortedTasks = useMemo(() => {
     let result = state.tasks;
@@ -113,11 +114,16 @@ const AllTasksPage: React.FC = () => {
         onClose={handleCloseModal}
         title={editingTask ? "Edit Task" : "Add New Task"}
       >
-        <TaskForm
-          initialData={editingTask}
-          onSubmit={handleSubmitTask}
-          onCancel={handleCloseModal}
-        />
+        {useMemo(
+          () => (
+            <TaskForm
+              initialData={editingTask}
+              onSubmit={handleSubmitTask}
+              onCancel={handleCloseModal}
+            />
+          ),
+          [editingTask, handleSubmitTask, handleCloseModal],
+        )}
       </TaskModal>
     </div>
   );
