@@ -5,7 +5,7 @@ interface SummaryCardsProps {
   tasks: Task[];
 }
 
-const SummaryCards: React.FC<SummaryCardsProps> = ({ tasks }) => {
+const SummaryCards: React.FC<SummaryCardsProps> = React.memo(({ tasks }) => {
   const summary = useMemo(() => {
     return tasks.reduce(
       (acc, task) => {
@@ -55,6 +55,6 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ tasks }) => {
       </div>
     </div>
   );
-};
+});
 
 export default SummaryCards;

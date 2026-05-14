@@ -9,7 +9,7 @@ interface FilterBarProps {
   onAddTask: () => void;
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({
+const FilterBar: React.FC<FilterBarProps> = React.memo(({
   statusFilter,
   setStatusFilter,
   sortOrder,
@@ -56,6 +56,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
       </button>
     </div>
   );
-};
+});
 
 export default FilterBar;

@@ -9,7 +9,7 @@ interface TaskCardProps {
   onDelete: (id: string) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete }) => {
+const TaskCard: React.FC<TaskCardProps> = React.memo(({ task, onEdit, onDelete }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const confirmDelete = () => {
@@ -88,6 +88,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete }) => {
       </TaskModal>
     </>
   );
-};
+});
 
 export default TaskCard;

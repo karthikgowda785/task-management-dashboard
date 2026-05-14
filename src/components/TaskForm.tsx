@@ -7,7 +7,7 @@ interface TaskFormProps {
   onCancel: () => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({
+const TaskForm: React.FC<TaskFormProps> = React.memo(({
   initialData,
   onSubmit,
   onCancel,
@@ -163,6 +163,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
       </div>
     </form>
   );
-};
+});
 
 export default TaskForm;
