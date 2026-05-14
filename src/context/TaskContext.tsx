@@ -23,7 +23,46 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY = "tasks_data";
 
-const initialState: TaskState = { tasks: [] };
+const initialState: TaskState = {
+  tasks: [
+    {
+      id: "1",
+      title: "Design System Audit",
+      description:
+        "Review all UI components for consistency with the new brand guidelines and update the Figma library.",
+      status: "Completed",
+      dueDate: "2026-05-20",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "2",
+      title: "API Integration",
+      description:
+        "Connect the task management frontend with the backend services and implement error handling.",
+      status: "In Progress",
+      dueDate: "2026-05-25",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "3",
+      title: "User Interview Scripts",
+      description:
+        "Prepare questions for the upcoming usability testing session with the product team.",
+      status: "Pending",
+      dueDate: "2026-05-18",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "4",
+      title: "Performance Optimization",
+      description:
+        "Implement React.memo and useMemo across the dashboard to ensure smooth 60fps interactions.",
+      status: "Pending",
+      dueDate: "2026-05-30",
+      createdAt: new Date().toISOString(),
+    },
+  ],
+};
 
 const initializer = (initialValue: TaskState): TaskState => {
   const savedTasks = localStorage.getItem(LOCAL_STORAGE_KEY);
