@@ -10,6 +10,7 @@ import type { ReactNode } from "react";
 import { taskReducer } from "./taskReducer";
 import type { TaskState, TaskAction } from "./taskReducer";
 import type { Task } from "../types/task";
+import { getLocalDateString } from "../utils/taskHelpers";
 
 interface TaskContextType {
   state: TaskState;
@@ -58,7 +59,7 @@ const initialState: TaskState = {
       description:
         "Implement React.memo and useMemo across the dashboard to ensure smooth 60fps interactions.",
       status: "Pending",
-      dueDate: "2026-05-30",
+      dueDate: getLocalDateString(new Date()),
       createdAt: new Date().toISOString(),
     },
   ],
