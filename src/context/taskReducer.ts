@@ -7,8 +7,7 @@ export type TaskState = {
 export type TaskAction =
   | { type: "ADD_TASK"; payload: Task }
   | { type: "UPDATE_TASK"; payload: Task }
-  | { type: "DELETE_TASK"; payload: string }
-  | { type: "SET_TASKS"; payload: Task[] };
+  | { type: "DELETE_TASK"; payload: string };
 
 export const taskReducer = (
   state: TaskState,
@@ -29,8 +28,6 @@ export const taskReducer = (
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.payload),
       };
-    case "SET_TASKS":
-      return { ...state, tasks: action.payload };
     default:
       return state;
   }
