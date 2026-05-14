@@ -19,3 +19,20 @@ export const getLocalDateString = (date: Date) => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const isDueDateNear = (dueDateStr: string, status: Task["status"]) => {
+  if (status === "Completed" || !dueDateStr) return false;
+  
+  const [year, month, day] = dueDateStr.split("-").map(Number);
+  const due = new Date(year, month - 1, day);
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const diffTime = due.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  // Return true only if due date is exactly today (0)
+  return diffDays === 0;
+};
+
